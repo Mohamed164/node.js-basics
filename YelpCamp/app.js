@@ -1,17 +1,42 @@
 var express = require('express')
+var bodyParser = require('body-parser');
+
 var app = express()
 app.set('view engine', 'ejs')
+app.use(bodyParser.urlencoded({extended: true}))
 
+var campgrounds = [
+        {name: "Salmon Creek", image: "https://farm9.staticflickr.com/8442/7962474612_bf2baf67c0.jpg"},
+        {name: "Granite Hill", image: "https://farm1.staticflickr.com/60/215827008_6489cd30c3.jpg"},
+        {name: "Mountain Goat's Rest", image: "https://farm7.staticflickr.com/6057/6234565071_4d20668bbd.jpg"},
+        {name: "Salmon Creek", image: "https://farm9.staticflickr.com/8442/7962474612_bf2baf67c0.jpg"},
+        {name: "Granite Hill", image: "https://farm1.staticflickr.com/60/215827008_6489cd30c3.jpg"},
+        {name: "Mountain Goat's Rest", image: "https://farm7.staticflickr.com/6057/6234565071_4d20668bbd.jpg"},
+        {name: "Salmon Creek", image: "https://farm9.staticflickr.com/8442/7962474612_bf2baf67c0.jpg"},
+        {name: "Granite Hill", image: "https://farm1.staticflickr.com/60/215827008_6489cd30c3.jpg"},
+        {name: "Mountain Goat's Rest", image: "https://farm7.staticflickr.com/6057/6234565071_4d20668bbd.jpg"}
+];
+    
 app.get('/', function (req,res) {
   res.render('landing')
 })
-var im = "https://media.architecturaldigest.com/photos/5c65b6362a81d22dc23c8473/16:9/w_1280,c_limit/GettyImages-818535592.jpg"
+
 app.get('/campgrounds', function(req, res){
-                      campgrounds = [
-                     {name: "Camp 2", image: im},
-                     {name: "Camp 3", image: im},
-                     {name: "Camp 4", image: im}]
   res.render('campgrounds', {campgrounds: campgrounds})
+})
+
+app.post('/campgrounds', function(req, res) {
+  // get data and add to database (array)
+  var name  = req.body.name
+  var imageUrl = req.body.image
+  var newCampground = {name: name, image: imageUrl}
+  campgrounds.push(newCampground)
+  res.redirect('/campgrounds')
+})
+
+app.get('/campgrounds/new', function(req, res) {
+  // get data and add to database (array)
+  res.render('new')
 })
 
 app.listen(3000, '127.0.0.1', function() {
